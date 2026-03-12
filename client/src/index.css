@@ -1,0 +1,51 @@
+@import "tailwindcss";
+/* ===== PAGE TRANSITION ANIMATIONS ===== */
+.home-page,
+.products-page,
+.detail-page,
+.cart-page,
+.checkout-page,
+.signin-page,
+.signup-page,
+.admin-signin-page,
+.wishlist-page,
+.myorders-page,
+.contact-page,
+.static-page {
+  animation: pageFadeIn 0.4s ease forwards;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Section reveal on scroll */
+.arrivals-section,
+.featured-section,
+.categories-section,
+.brand-section,
+.stats-section,
+.why-section,
+.testimonials-section,
+.newsletter-section,
+.features-bar {
+  animation: sectionFadeIn 0.6s ease forwards;
+}
+
+@keyframes sectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

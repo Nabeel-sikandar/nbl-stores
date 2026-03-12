@@ -1,0 +1,145 @@
+/* Full page — centered form, slightly darker bg */
+.admin-signin-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  padding: 40px 20px;
+}
+
+/* Form container */
+.admin-signin-container {
+  background-color: #ffffff;
+  padding: 48px 40px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Admin badge — small tag at top */
+.admin-badge {
+  display: inline-block;
+  background-color: #111111;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+/* Title */
+.admin-signin-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+/* Subtitle */
+.admin-signin-subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+/* Form */
+.admin-signin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Input group */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #111111;
+}
+
+.input-field {
+  padding: 12px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #111111;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-field::placeholder {
+  color: #9ca3af;
+}
+
+.input-field:focus {
+  border-color: #111111;
+}
+
+/* Auth error message */
+.auth-error {
+  background-color: #fef2f2;
+  color: #ef4444;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: 16px;
+  border: 1px solid #fecaca;
+}
+
+/* Submit button — slightly different from user */
+.admin-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-submit-btn:hover {
+  background-color: #333333;
+}
+
+/* Footer */
+.admin-signin-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 24px;
+}
+
+.footer-link {
+  color: #111111;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .admin-signin-container {
+    padding: 32px 24px;
+  }
+
+  .admin-signin-title {
+    font-size: 1.5rem;
+  }
+}

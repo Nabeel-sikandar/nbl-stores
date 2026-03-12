@@ -1,0 +1,65 @@
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  z-index: 999;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #111111;
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.3s ease;
+}
+
+.back-to-top:hover {
+  background-color: #333333;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode */
+.home-dark .back-to-top,
+.products-dark .back-to-top,
+.detail-dark .back-to-top,
+.wishlist-dark .back-to-top,
+.myorders-dark .back-to-top {
+  background-color: #ffffff;
+  color: #111111;
+}
+
+.home-dark .back-to-top:hover,
+.products-dark .back-to-top:hover {
+  background-color: #e5e7eb;
+}
+
+@media (max-width: 640px) {
+  .back-to-top {
+    bottom: 20px;
+    left: 20px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .back-to-top svg {
+    width: 16px;
+    height: 16px;
+  }
+}

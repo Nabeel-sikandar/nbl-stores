@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <!-- Square icon version -->
+  <rect width="120" height="120" rx="16" fill="#111111"/>
+  
+  <!-- NBL stacked -->
+  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="42" font-weight="700" fill="#FFFFFF" letter-spacing="4">NBL</text>
+  
+  <!-- Small underline accent -->
+  <line x1="30" y1="82" x2="90" y2="82" stroke="#9CA3AF" stroke-width="1"/>
+</svg>
