@@ -1,11 +1,11 @@
-// Axios instance — base URL set, har request pe token bhejega
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // Backend URL
+  baseURL: import.meta.env.PROD
+    ? "https://nbl-stores-api.vercel.app/api"
+    : "http://localhost:5000/api",
 });
 
-// Har request ke saath token automatically bhejo
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
