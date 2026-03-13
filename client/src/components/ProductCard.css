@@ -1,9 +1,13 @@
+/* ===== PRODUCT CARD ===== */
 .product-card {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  background-color: #ffffff;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
 }
 
 .product-card:hover {
@@ -11,27 +15,30 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
+/* Image */
 .product-image-container {
-  display: block;
-  width: 100%;
-  height: 280px;
   overflow: hidden;
-  background-color: #f5f5f5;
+  border-radius: 12px 12px 0 0;
+  aspect-ratio: 1 / 1;
 }
 
 .product-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .product-card:hover .product-image {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
+/* Info */
 .product-info {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px;
 }
 
 .product-title-link {
@@ -39,26 +46,26 @@
   color: inherit;
 }
 
-.product-title-link:hover .product-title {
-  color: #6b7280;
-}
-
 .product-title {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #111111;
   margin-bottom: 6px;
-  transition: color 0.3s ease;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .product-desc {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: #6b7280;
   line-height: 1.5;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -67,55 +74,44 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: auto;
 }
 
 .product-price {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #111111;
-  transition: color 0.3s ease;
 }
 
 .add-to-cart-btn {
+  padding: 10px 20px;
   background-color: #111111;
   color: #ffffff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .add-to-cart-btn:hover {
   background-color: #333333;
+  transform: translateY(-1px);
 }
 
-/* Dark mode */
+/* ===== DARK MODE ===== */
 .product-card-dark {
   background-color: #1a1a1a;
-  border-color: #2a2a2a;
-}
-
-.product-card-dark:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-.product-card-dark .product-image-container {
-  background-color: #222222;
+  border-color: #333;
 }
 
 .product-card-dark .product-title {
   color: #ffffff;
 }
 
-.product-card-dark .product-title-link:hover .product-title {
-  color: #9ca3af;
-}
-
 .product-card-dark .product-desc {
-  color: #6b7280;
+  color: #9ca3af;
 }
 
 .product-card-dark .product-price {
@@ -131,35 +127,46 @@
   background-color: #e5e7eb;
 }
 
-@media (max-width: 480px) {
-  .product-image-container {
-    height: 220px;
-  }
-
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
   .product-info {
-    padding: 14px;
+    padding: 10px;
   }
 
-  .product-bottom {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
+  .product-title {
+    font-size: 0.78rem;
+  }
+
+  .product-desc {
+    font-size: 0.7rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .product-price {
+    font-size: 0.82rem;
   }
 
   .add-to-cart-btn {
-    width: 100%;
-    text-align: center;
+    padding: 8px 12px;
+    font-size: 0.72rem;
+  }
+
+  .product-image-container {
+    aspect-ratio: 1 / 1;
   }
 }
-.product-image-container {
-  overflow: hidden;
-  border-radius: 12px 12px 0 0;
-}
 
-.product-image {
-  transition: transform 0.5s ease;
-}
+@media (max-width: 380px) {
+  .product-info {
+    padding: 8px;
+  }
 
-.product-card:hover .product-image {
-  transform: scale(1.08);
+  .product-title {
+    font-size: 0.72rem;
+  }
+
+  .add-to-cart-btn {
+    padding: 6px 10px;
+    font-size: 0.68rem;
+  }
 }
