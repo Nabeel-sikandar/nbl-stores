@@ -30,12 +30,13 @@ const Checkout = () => {
   const [couponLoading, setCouponLoading] = useState(false);
 
   // Calculate totals
-  const discountAmount = couponApplied ? couponApplied.discountAmount : 0;
-  const afterDiscount = checkoutSubtotal - discountAmount;
+  const discountAmount = couponApplied ? Math.min(couponApplied.discountAmount, checkoutSubtotal) : 0;
+  const afterDiscount = Math.max(checkoutSubtotal - discountAmount, 0);
   const shippingFee = afterDiscount >= 5000 ? 0 : 200;
   const total = afterDiscount + shippingFee;
 
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null); // Store order info for confirmation
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -91,6 +92,16 @@ const Checkout = () => {
         quantity: item.quantity,
       }));
 
+      // Save order details BEFORE clearing cart
+      setOrderDetails({
+        shippingData: { ...shippingData },
+        coupon: couponApplied ? { code: couponApplied.code, discount: couponApplied.discount } : null,
+        subtotal: checkoutSubtotal,
+        discount: discountAmount,
+        shipping: shippingFee,
+        total: total,
+      });
+
       await API.post("/orders", {
         items: orderItems,
         shippingInfo: shippingData,
@@ -124,7 +135,8 @@ const Checkout = () => {
     );
   }
 
-  if (orderPlaced) {
+  // Order confirmation — uses saved orderDetails
+  if (orderPlaced && orderDetails) {
     return (
       <div className={`checkout-page ${darkMode ? "checkout-dark" : ""}`}>
         <ProductsNavbar />
@@ -135,12 +147,19 @@ const Checkout = () => {
             Thank you for shopping with NBL Stores. Your order will be delivered to your address.
           </p>
           <div className="confirmation-details">
-            <p className="font-[Inter]"><strong>Delivered to:</strong> {shippingData.fullName}</p>
-            <p className="font-[Inter]"><strong>Address:</strong> {shippingData.address}, {shippingData.city}</p>
-            <p className="font-[Inter]"><strong>Phone:</strong> {shippingData.phone}</p>
+            <p className="font-[Inter]"><strong>Delivered to:</strong> {orderDetails.shippingData.fullName}</p>
+            <p className="font-[Inter]"><strong>Address:</strong> {orderDetails.shippingData.address}, {orderDetails.shippingData.city}</p>
+            <p className="font-[Inter]"><strong>Phone:</strong> {orderDetails.shippingData.phone}</p>
             <p className="font-[Inter]"><strong>Payment:</strong> Cash on Delivery</p>
-            {couponApplied && <p className="font-[Inter]"><strong>Coupon:</strong> {couponApplied.code} (-{couponApplied.discount}%)</p>}
-            <p className="font-[Inter]"><strong>Total:</strong> Rs. {total}</p>
+            {orderDetails.coupon && (
+              <p className="font-[Inter]"><strong>Coupon:</strong> {orderDetails.coupon.code} (-{orderDetails.coupon.discount}%)</p>
+            )}
+            {orderDetails.discount > 0 && (
+              <p className="font-[Inter]"><strong>Discount:</strong> - Rs. {orderDetails.discount}</p>
+            )}
+            <p className="font-[Inter]"><strong>Subtotal:</strong> Rs. {orderDetails.subtotal}</p>
+            <p className="font-[Inter]"><strong>Shipping:</strong> {orderDetails.shipping === 0 ? "FREE" : `Rs. ${orderDetails.shipping}`}</p>
+            <p className="font-[Inter]" style={{ fontSize: "1.1rem", marginTop: "8px" }}><strong>Total:</strong> Rs. {orderDetails.total}</p>
           </div>
           <Link to="/products" className="continue-btn font-[Inter]">Continue Shopping</Link>
         </div>

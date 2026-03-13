@@ -1,24 +1,24 @@
 // CartContext — poore app mein cart data share karta hai
 import { createContext, useContext, useState } from "react";
 
-// Context create kiya
 const CartContext = createContext();
 
-// Custom hook — kisi bhi component mein cart access karne ke liye
-// Usage: const { cart, addToCart, removeFromCart } = useCart();
 export const useCart = () => useContext(CartContext);
 
-// CartProvider — App ko wrap karega, saare children ko cart data milega
 export const CartProvider = ({ children }) => {
-  // Cart items state — array of objects
   const [cart, setCart] = useState([]);
 
-  // Add to Cart — product + size + quantity
+  // Get product ID — MongoDB _id ya local id
+  const getProductId = (product) => product._id || product.id;
+
+  // Add to Cart
   const addToCart = (product, size = "M", quantity = 1) => {
     setCart((prevCart) => {
+      const productId = getProductId(product);
+
       // Check agar same product + same size already cart mein hai
       const existingIndex = prevCart.findIndex(
-        (item) => item.id === product.id && item.size === size
+        (item) => getProductId(item) === productId && item.size === size
       );
 
       if (existingIndex !== -1) {
@@ -33,10 +33,10 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Remove from Cart — product id + size ke basis pe
+  // Remove from Cart
   const removeFromCart = (productId, size) => {
     setCart((prevCart) =>
-      prevCart.filter((item) => !(item.id === productId && item.size === size))
+      prevCart.filter((item) => !(getProductId(item) === productId && item.size === size))
     );
   };
 
@@ -44,19 +44,19 @@ export const CartProvider = ({ children }) => {
   const increaseQuantity = (productId, size) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === productId && item.size === size
+        getProductId(item) === productId && item.size === size
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )
     );
   };
 
-  // Decrease quantity — agar 1 hai toh remove kar do
+  // Decrease quantity — agar 1 hai toh remove
   const decreaseQuantity = (productId, size) => {
     setCart((prevCart) =>
       prevCart
         .map((item) =>
-          item.id === productId && item.size === size
+          getProductId(item) === productId && item.size === size
             ? { ...item, quantity: item.quantity - 1 }
             : item
         )
@@ -64,16 +64,16 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // Total items count — navbar badge ke liye
+  // Total items count
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
-  // Total price — checkout ke liye
+  // Total price
   const cartTotal = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-  // Clear cart — checkout ke baad
+  // Clear cart
   const clearCart = () => setCart([]);
 
   return (
