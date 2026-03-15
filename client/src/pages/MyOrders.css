@@ -456,3 +456,67 @@
     font-size: 1.5rem;
   }
 }
+/* ===== CANCEL ORDER ===== */
+.order-footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.cancel-order-btn {
+  padding: 8px 20px;
+  background: none;
+  border: 1.5px solid #ef4444;
+  color: #ef4444;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-order-btn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+/* Cancelled Banner */
+.cancelled-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: #fef2f2;
+  color: #dc2626;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+/* Dark mode */
+.myorders-dark .cancel-order-btn {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.myorders-dark .cancel-order-btn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+.myorders-dark .cancelled-banner {
+  background-color: #1c0a0a;
+  color: #ef4444;
+}
+
+/* Cancelled filter tab */
+.status-cancelled {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+@media (max-width: 640px) {
+  .order-footer-right {
+    align-items: flex-start;
+  }
+}

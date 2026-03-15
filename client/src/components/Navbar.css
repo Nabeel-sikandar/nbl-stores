@@ -248,6 +248,39 @@
 .navbar-dark.navbar-transparent .nav-btn-logout {
   color: #ffffff;
 }
+/* Active Link */
+.nav-link-active {
+  color: #111111 !important;
+  font-weight: 600;
+  position: relative;
+}
+
+.nav-link-active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #111111;
+  border-radius: 1px;
+}
+
+.navbar-transparent .nav-link-active {
+  color: #ffffff !important;
+}
+
+.navbar-transparent .nav-link-active::after {
+  background-color: #ffffff;
+}
+
+.navbar-dark.navbar-solid .nav-link-active {
+  color: #ffffff !important;
+}
+
+.navbar-dark.navbar-solid .nav-link-active::after {
+  background-color: #ffffff;
+}
 
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 640px) {

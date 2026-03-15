@@ -526,3 +526,29 @@
     width: 100%;
   }
 }
+/* ===== NO PRODUCTS FOUND ===== */
+.no-products-found {
+  text-align: center;
+  padding: 80px 20px;
+  grid-column: 1 / -1;
+}
+
+.no-products-title {
+  font-size: 1.5rem;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+.no-products-text {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* Dark mode */
+.products-dark .no-products-found svg {
+  color: #333 !important;
+}
+
+.products-dark .no-products-title {
+  color: #ffffff;
+}

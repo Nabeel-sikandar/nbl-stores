@@ -1,19 +1,32 @@
-// Home Page — Full premium landing page connected to backend
+// Home Page — Full premium landing page with scroll reveal + global toast
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
-import { useTheme } from "../context/ThemeContext";
-import API from "../api/axios";
 import BackToTop from "../components/BackToTop";
+import { useTheme } from "../context/ThemeContext";
+import { useToast } from "../components/Toast";
+import useScrollReveal from "../hooks/useScrollReveal";
+import API from "../api/axios";
 import "./Home.css";
 
 const Home = () => {
   const { darkMode } = useTheme();
+  const { showToast } = useToast();
   const [email, setEmail] = useState("");
   const [allProducts, setAllProducts] = useState([]);
-  const [showToast, setShowToast] = useState(false);
+
+  // Scroll reveal refs
+  const [arrivalsRef, arrivalsVisible] = useScrollReveal();
+  const [featuredRef, featuredVisible] = useScrollReveal();
+  const [categoriesRef, categoriesVisible] = useScrollReveal();
+  const [brandRef, brandVisible] = useScrollReveal();
+  const [statsRef, statsVisible] = useScrollReveal();
+  const [whyRef, whyVisible] = useScrollReveal();
+  const [testimonialsRef, testimonialsVisible] = useScrollReveal();
+  const [newsletterRef, newsletterVisible] = useScrollReveal();
+  const [featuresRef, featuresVisible] = useScrollReveal();
 
   // Backend se products fetch karo
   useEffect(() => {
@@ -33,13 +46,13 @@ const Home = () => {
 
   // New arrivals — last 3 products
   const newArrivals = allProducts.slice(-3);
-  //stay in the loop form submit handler
+
+  // Newsletter submit — global toast
   const handleNewsletter = (e) => {
-  e.preventDefault();
-  setShowToast(true);
-  setEmail("");
-  setTimeout(() => setShowToast(false), 4000); // 4 sec baad hide
-};
+    e.preventDefault();
+    showToast("Subscribed successfully! You'll receive exclusive offers.", "success");
+    setEmail("");
+  };
 
   return (
     <div className={`home-page ${darkMode ? "home-dark" : ""}`}>
@@ -59,7 +72,7 @@ const Home = () => {
       </section>
 
       {/* ===== 2. NEW ARRIVALS ===== */}
-      <section className="arrivals-section">
+      <section ref={arrivalsRef} className={`arrivals-section reveal ${arrivalsVisible ? "revealed" : ""}`}>
         <div className="section-container">
           <p className="section-label font-[Inter]">JUST DROPPED</p>
           <h2 className="section-title font-[Playfair_Display]">New Arrivals</h2>
@@ -72,7 +85,7 @@ const Home = () => {
       </section>
 
       {/* ===== 3. FEATURED PRODUCTS ===== */}
-      <section className="featured-section">
+      <section ref={featuredRef} className={`featured-section reveal ${featuredVisible ? "revealed" : ""}`}>
         <div className="section-container">
           <p className="section-label font-[Inter]">HANDPICKED FOR YOU</p>
           <h2 className="section-title font-[Playfair_Display]">Featured Products</h2>
@@ -88,7 +101,7 @@ const Home = () => {
       </section>
 
       {/* ===== 4. CATEGORIES ===== */}
-      <section className="categories-section">
+      <section ref={categoriesRef} className={`categories-section reveal ${categoriesVisible ? "revealed" : ""}`}>
         <div className="section-container">
           <p className="section-label font-[Inter]">BROWSE BY</p>
           <h2 className="section-title font-[Playfair_Display]">Shop by Category</h2>
@@ -119,7 +132,7 @@ const Home = () => {
       </section>
 
       {/* ===== 5. BRAND STORY ===== */}
-      <section className="brand-section">
+      <section ref={brandRef} className={`brand-section reveal ${brandVisible ? "revealed" : ""}`}>
         <div className="section-container">
           <div className="brand-grid">
             <div className="brand-image-container">
@@ -141,7 +154,7 @@ const Home = () => {
       </section>
 
       {/* ===== 6. STATS ===== */}
-      <section className="stats-section">
+      <section ref={statsRef} className={`stats-section reveal ${statsVisible ? "revealed" : ""}`}>
         <div className="section-container">
           <div className="stats-grid">
             <div className="stat-item">
@@ -165,7 +178,7 @@ const Home = () => {
       </section>
 
       {/* ===== 7. WHY CHOOSE US ===== */}
-      <section className="why-section">
+      <section ref={whyRef} className={`why-section reveal ${whyVisible ? "revealed" : ""}`}>
         <div className="section-container">
           <p className="section-label font-[Inter]">WHY NBL STORES</p>
           <h2 className="section-title font-[Playfair_Display]">Why Choose Us</h2>
@@ -203,48 +216,33 @@ const Home = () => {
       </section>
 
       {/* ===== 8. TESTIMONIALS ===== */}
-      <section className="testimonials-section">
+      <section ref={testimonialsRef} className={`testimonials-section reveal ${testimonialsVisible ? "revealed" : ""}`}>
         <div className="section-container">
           <p className="section-label font-[Inter]">WHAT PEOPLE SAY</p>
           <h2 className="section-title font-[Playfair_Display]">Customer Reviews</h2>
           <div className="testimonials-grid">
             <div className="testimonial-card">
               <div className="testimonial-stars">★★★★★</div>
-              <p className="testimonial-text font-[Inter]">
-                "Amazing quality! The fabric is so soft and the fit is perfect. Will definitely order again from NBL Stores."
-              </p>
+              <p className="testimonial-text font-[Inter]">"Amazing quality! The fabric is so soft and the fit is perfect. Will definitely order again from NBL Stores."</p>
               <div className="testimonial-author">
                 <div className="author-avatar font-[Inter]">AK</div>
-                <div>
-                  <p className="author-name font-[Inter]">Ali Khan</p>
-                  <p className="author-location font-[Inter]">Islamabad</p>
-                </div>
+                <div><p className="author-name font-[Inter]">Ali Khan</p><p className="author-location font-[Inter]">Islamabad</p></div>
               </div>
             </div>
             <div className="testimonial-card">
               <div className="testimonial-stars">★★★★★</div>
-              <p className="testimonial-text font-[Inter]">
-                "Fast delivery and great customer service. The dress I ordered looked even better in person. Highly recommended!"
-              </p>
+              <p className="testimonial-text font-[Inter]">"Fast delivery and great customer service. The dress I ordered looked even better in person. Highly recommended!"</p>
               <div className="testimonial-author">
                 <div className="author-avatar font-[Inter]">SA</div>
-                <div>
-                  <p className="author-name font-[Inter]">Sara Ahmed</p>
-                  <p className="author-location font-[Inter]">Lahore</p>
-                </div>
+                <div><p className="author-name font-[Inter]">Sara Ahmed</p><p className="author-location font-[Inter]">Lahore</p></div>
               </div>
             </div>
             <div className="testimonial-card">
               <div className="testimonial-stars">★★★★★</div>
-              <p className="testimonial-text font-[Inter]">
-                "Best online fashion store in Pakistan. Premium quality at affordable prices. My kids love the clothes!"
-              </p>
+              <p className="testimonial-text font-[Inter]">"Best online fashion store in Pakistan. Premium quality at affordable prices. My kids love the clothes!"</p>
               <div className="testimonial-author">
                 <div className="author-avatar font-[Inter]">FN</div>
-                <div>
-                  <p className="author-name font-[Inter]">Fatima Noor</p>
-                  <p className="author-location font-[Inter]">Peshawar</p>
-                </div>
+                <div><p className="author-name font-[Inter]">Fatima Noor</p><p className="author-location font-[Inter]">Peshawar</p></div>
               </div>
             </div>
           </div>
@@ -252,22 +250,13 @@ const Home = () => {
       </section>
 
       {/* ===== 9. NEWSLETTER ===== */}
-      <section className="newsletter-section">
+      <section ref={newsletterRef} className={`newsletter-section reveal ${newsletterVisible ? "revealed" : ""}`}>
         <div className="section-container">
           <div className="newsletter-content">
             <h2 className="newsletter-title font-[Playfair_Display]">Stay in the Loop</h2>
-            <p className="newsletter-desc font-[Inter]">
-              Subscribe to get exclusive offers, new arrivals updates, and 10% off your first order.
-            </p>
+            <p className="newsletter-desc font-[Inter]">Subscribe to get exclusive offers, new arrivals updates, and 10% off your first order.</p>
             <form onSubmit={handleNewsletter} className="newsletter-form">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="newsletter-input font-[Inter]"
-                required
-              />
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" className="newsletter-input font-[Inter]" required />
               <button type="submit" className="newsletter-btn font-[Inter]">Subscribe</button>
             </form>
           </div>
@@ -275,58 +264,27 @@ const Home = () => {
       </section>
 
       {/* ===== 10. FEATURES BAR ===== */}
-      <section className="features-bar">
+      <section ref={featuresRef} className={`features-bar reveal ${featuresVisible ? "revealed" : ""}`}>
         <div className="features-bar-content">
           <div className="feature-item">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-            </svg>
-            <div>
-              <p className="feature-title font-[Inter]">FREE SHIPPING</p>
-              <p className="feature-desc font-[Inter]">Free shipping on orders over Rs. 5,000</p>
-            </div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <div><p className="feature-title font-[Inter]">FREE SHIPPING</p><p className="feature-desc font-[Inter]">Free shipping on orders over Rs. 5,000</p></div>
           </div>
           <div className="feature-item">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
-            </svg>
-            <div>
-              <p className="feature-title font-[Inter]">EXCHANGE & RETURN</p>
-              <p className="feature-desc font-[Inter]">30 day exchanges & returns</p>
-            </div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+            <div><p className="feature-title font-[Inter]">EXCHANGE & RETURN</p><p className="feature-desc font-[Inter]">30 day exchanges & returns</p></div>
           </div>
           <div className="feature-item">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-            <div>
-              <p className="feature-title font-[Inter]">SECURE CHECKOUT</p>
-              <p className="feature-desc font-[Inter]">Quick, secure one-page checkout</p>
-            </div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <div><p className="feature-title font-[Inter]">SECURE CHECKOUT</p><p className="feature-desc font-[Inter]">Quick, secure one-page checkout</p></div>
           </div>
           <div className="feature-item">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <div>
-              <p className="feature-title font-[Inter]">NO RE-STOCK FEES</p>
-              <p className="feature-desc font-[Inter]">Not happy? Send back and get full refund</p>
-            </div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div><p className="feature-title font-[Inter]">NO RE-STOCK FEES</p><p className="feature-desc font-[Inter]">Not happy? Send back and get full refund</p></div>
           </div>
         </div>
       </section>
-     {/* Toast Notification */}
-{showToast && (
-  <div className="toast-notification">
-    <div className="toast-icon">✓</div>
-    <div className="toast-text">
-      <p className="toast-title font-[Inter]">Subscribed Successfully!</p>
-      <p className="toast-desc font-[Inter]">You'll receive exclusive offers and updates.</p>
-    </div>
-    <button onClick={() => setShowToast(false)} className="toast-close">✕</button>
-  </div>
-)}
-      {/* ===== 11. FOOTER ===== */}
+
       <Footer />
       <BackToTop />
     </div>

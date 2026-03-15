@@ -1,16 +1,18 @@
-// My Orders — User order tracking page
+// My Orders — User order tracking + Cancel order
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProductsNavbar from "../components/ProductsNavbar";
 import Spinner from "../components/Spinner";
 import Footer from "../components/Footer";
-import { useTheme } from "../context/ThemeContext";
-import API from "../api/axios";
 import BackToTop from "../components/BackToTop";
+import { useTheme } from "../context/ThemeContext";
+import { useToast } from "../components/Toast";
+import API from "../api/axios";
 import "./MyOrders.css";
 
 const MyOrders = () => {
   const { darkMode } = useTheme();
+  const { showToast } = useToast();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -28,6 +30,17 @@ const MyOrders = () => {
     };
     fetchOrders();
   }, []);
+
+  const handleCancelOrder = async (orderId) => {
+    if (!window.confirm("Are you sure you want to cancel this order?")) return;
+    try {
+      await API.put(`/orders/${orderId}/cancel`);
+      setOrders(orders.map((o) => o._id === orderId ? { ...o, status: "Cancelled" } : o));
+      showToast("Order cancelled successfully", "success");
+    } catch (error) {
+      showToast(error.response?.data?.msg || "Failed to cancel order", "error");
+    }
+  };
 
   const filteredOrders = filter === "all"
     ? orders
@@ -66,7 +79,7 @@ const MyOrders = () => {
 
         {/* Filter Tabs */}
         <div className="order-filter-tabs">
-          {["all", "Pending", "Processing", "Shipped", "Delivered"].map((f) => (
+          {["all", "Pending", "Processing", "Shipped", "Delivered", "Cancelled"].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
@@ -88,8 +101,9 @@ const MyOrders = () => {
           <div className="orders-empty">
             <div className="empty-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
+                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
               </svg>
             </div>
             <h2 className="empty-title font-[Playfair_Display]">No orders found</h2>
@@ -138,6 +152,14 @@ const MyOrders = () => {
                     </div>
                   )}
 
+                  {/* Cancelled Banner */}
+                  {order.status === "Cancelled" && (
+                    <div className="cancelled-banner">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                      <p className="font-[Inter]">This order has been cancelled</p>
+                    </div>
+                  )}
+
                   {/* Order Items */}
                   <div className="order-items-list">
                     {order.items.map((item, i) => (
@@ -158,10 +180,17 @@ const MyOrders = () => {
                       <p className="font-[Inter]"><strong>Ship to:</strong> {order.shippingInfo?.fullName}</p>
                       <p className="font-[Inter]">{order.shippingInfo?.address}, {order.shippingInfo?.city}</p>
                     </div>
-                    <div className="order-total-info">
-                      <p className="order-total-label font-[Inter]">Total</p>
-                      <p className="order-total-value font-[Inter]">Rs. {order.total?.toLocaleString()}</p>
-                      <p className="order-payment font-[Inter]">{order.paymentMethod}</p>
+                    <div className="order-footer-right">
+                      <div className="order-total-info">
+                        <p className="order-total-label font-[Inter]">Total</p>
+                        <p className="order-total-value font-[Inter]">Rs. {order.total?.toLocaleString()}</p>
+                        <p className="order-payment font-[Inter]">{order.paymentMethod}</p>
+                      </div>
+                      {(order.status === "Pending" || order.status === "Processing") && (
+                        <button onClick={() => handleCancelOrder(order._id)} className="cancel-order-btn font-[Inter]">
+                          Cancel Order
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -172,7 +201,7 @@ const MyOrders = () => {
       </div>
 
       <Footer />
-        <BackToTop />
+      <BackToTop />
     </div>
   );
 };

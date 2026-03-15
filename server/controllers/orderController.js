@@ -1,4 +1,4 @@
-// Order Controller — Place order, Get orders, Update status
+// Order Controller — Place order, Get orders, Update status, Cancel order
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import { useCoupon } from "./couponController.js";
@@ -16,7 +16,7 @@ export const placeOrder = async (req, res) => {
       return res.status(400).json({ msg: "Shipping info is required" });
     }
 
-    // Stock check + subtract karo har item ke liye
+    // Stock check + subtract
     for (const item of items) {
       if (!item.product) continue;
 
@@ -41,9 +41,9 @@ export const placeOrder = async (req, res) => {
     }
 
     // Discount + total calculation
-    const discount = Math.min(req.body.discount || 0, subtotal); // discount subtotal se zyada nahi
+    const discount = Math.min(req.body.discount || 0, subtotal);
     const couponCode = req.body.couponCode || null;
-    const afterDiscount = Math.max(subtotal - discount, 0); // negative nahi hoga
+    const afterDiscount = Math.max(subtotal - discount, 0);
     const finalShipping = afterDiscount >= 5000 ? 0 : 200;
     const finalTotal = afterDiscount + finalShipping;
 
@@ -62,15 +62,11 @@ export const placeOrder = async (req, res) => {
 
     await newOrder.save();
 
-    // Coupon use count increment
     if (couponCode) {
       await useCoupon(couponCode);
     }
 
-    res.status(201).json({
-      msg: "Order placed successfully",
-      order: newOrder,
-    });
+    res.status(201).json({ msg: "Order placed successfully", order: newOrder });
   } catch (error) {
     console.error("Place Order Error:", error.message);
     res.status(500).json({ msg: "Server error" });
@@ -136,12 +132,69 @@ export const updateOrderStatus = async (req, res) => {
       return res.status(404).json({ msg: "Order not found" });
     }
 
+    // Agar admin cancel kare toh stock wapas
+    if (status === "Cancelled" && order.status !== "Cancelled") {
+      for (const item of order.items) {
+        if (!item.product) continue;
+        const product = await Product.findById(item.product);
+        if (product) {
+          const sizeObj = product.sizes.find((s) => s.size === item.size);
+          if (sizeObj) {
+            sizeObj.stock += item.quantity;
+            await product.save();
+          }
+        }
+      }
+    }
+
     order.status = status;
     await order.save();
 
     res.status(200).json({ msg: "Order status updated", order });
   } catch (error) {
     console.error("Update Order Error:", error.message);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
+// ==================== CANCEL MY ORDER (User) ====================
+export const cancelMyOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ msg: "Order not found" });
+    }
+
+    // Check ke order is user ka hai
+    if (order.user.toString() !== req.user.id) {
+      return res.status(403).json({ msg: "Not authorized" });
+    }
+
+    // Sirf Pending ya Processing cancel ho sakta hai
+    if (!["Pending", "Processing"].includes(order.status)) {
+      return res.status(400).json({ msg: "Only Pending or Processing orders can be cancelled" });
+    }
+
+    // Stock wapas add karo
+    for (const item of order.items) {
+      if (!item.product) continue;
+      const product = await Product.findById(item.product);
+      if (product) {
+        const sizeObj = product.sizes.find((s) => s.size === item.size);
+        if (sizeObj) {
+          sizeObj.stock += item.quantity;
+          await product.save();
+        }
+      }
+    }
+
+    order.status = "Cancelled";
+    await order.save();
+
+    res.status(200).json({ msg: "Order cancelled successfully", order });
+  } catch (error) {
+    console.error("Cancel Order Error:", error.message);
     res.status(500).json({ msg: "Server error" });
   }
 };

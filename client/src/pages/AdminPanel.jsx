@@ -725,7 +725,13 @@ const AdminPanel = () => {
             <div className="orders-list">
               {loadingOrders ? <p className="empty-msg font-[Inter]">Loading...</p> : filteredOrders.length === 0 ? <p className="empty-msg font-[Inter]">No orders found.</p> : filteredOrders.map((order) => (
                 <div key={order._id} className="order-card">
-                  <div className="order-header"><div><p className="order-id font-[Inter]">Order #{order._id.slice(-6)}</p><p className="order-date font-[Inter]">{new Date(order.createdAt).toLocaleDateString()}</p></div><select value={order.status} onChange={(e) => changeOrderStatus(order._id, e.target.value)} className={`status-select font-[Inter] ${getStatusClass(order.status)}`}><option value="Pending">Pending</option><option value="Processing">Processing</option><option value="Shipped">Shipped</option><option value="Delivered">Delivered</option></select></div>
+                  <div className="order-header"><div><p className="order-id font-[Inter]">Order #{order._id.slice(-6)}</p><p className="order-date font-[Inter]">{new Date(order.createdAt).toLocaleDateString()}</p></div><select value={order.status} onChange={(e) => changeOrderStatus(order._id, e.target.value)} className={`status-select font-[Inter] ${getStatusClass(order.status)}`}>
+  <option value="Pending">Pending</option>
+  <option value="Processing">Processing</option>
+  <option value="Shipped">Shipped</option>
+  <option value="Delivered">Delivered</option>
+  <option value="Cancelled">Cancelled</option>
+</select></div>
                   <div className="order-customer"><p className="font-[Inter]"><strong>Customer:</strong> {order.shippingInfo?.fullName}</p><p className="font-[Inter]"><strong>Phone:</strong> {order.shippingInfo?.phone}</p><p className="font-[Inter]"><strong>Address:</strong> {order.shippingInfo?.address}, {order.shippingInfo?.city}</p></div>
                   <div className="order-items">{order.items.map((item, i) => (<div key={i} className="order-item-row"><span className="font-[Inter]">{item.title} ({item.size}) × {item.quantity}</span><span className="font-[Inter]">Rs. {item.price * item.quantity}</span></div>))}</div>
                   <div className="order-total"><span className="font-[Inter]">Total</span><span className="order-total-price font-[Inter]">Rs. {order.total}</span></div>

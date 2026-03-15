@@ -65,8 +65,36 @@
   transition: transform 0.5s ease;
 }
 
-.detail-image:hover {
-  transform: scale(1.05);
+/* ===== HOVER MAGNIFIER ZOOM ===== */
+.detail-image-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: zoom-in;
+  --zoom-x: 50%;
+  --zoom-y: 50%;
+}
+
+.detail-image {
+  width: 100%;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  transform-origin: var(--zoom-x) var(--zoom-y);
+}
+
+.detail-image-container.zooming .detail-image {
+  transform: scale(2);
+}
+
+/* Mobile pe zoom disable — touch pe kaam nahi karta properly */
+@media (max-width: 768px) {
+  .detail-image-container {
+    cursor: default;
+  }
+
+  .detail-image-container.zooming .detail-image {
+    transform: none;
+  }
 }
 
 /* ===== BADGES ===== */
@@ -1314,4 +1342,81 @@
   .tabs-section {
     padding: 0 16px;
   }
+}
+
+/* ===== SOCIAL SHARE ===== */
+.share-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.share-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.share-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.share-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid #e5e7eb;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #6b7280;
+}
+
+.share-btn:hover {
+  transform: translateY(-2px);
+}
+
+.share-whatsapp:hover {
+  background-color: #25d366;
+  border-color: #25d366;
+  color: #ffffff;
+}
+
+.share-facebook:hover {
+  background-color: #1877f2;
+  border-color: #1877f2;
+  color: #ffffff;
+}
+
+.share-twitter:hover {
+  background-color: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+
+.share-copy:hover {
+  background-color: #6b7280;
+  border-color: #6b7280;
+  color: #ffffff;
+}
+
+/* Dark mode share */
+.detail-dark .share-section {
+  border-top-color: #333;
+}
+
+.detail-dark .share-label {
+  color: #9ca3af;
+}
+
+.detail-dark .share-btn {
+  border-color: #333;
+  color: #9ca3af;
 }

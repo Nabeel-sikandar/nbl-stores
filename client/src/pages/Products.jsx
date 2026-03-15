@@ -186,7 +186,15 @@ const Products = () => {
 
         {!loading && sortedProducts.length === 0 && (
           <div className="no-products-container">
-            <p className="no-products font-[Inter]">No products found.</p>
+            <div className="no-products-found">
+  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#d1d5db", marginBottom: "16px" }}>
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    <line x1="8" y1="11" x2="14" y2="11" />
+  </svg>
+  <h3 className="no-products-title font-[Playfair_Display]">No Products Found</h3>
+  <p className="no-products-text font-[Inter]">Try adjusting your search or filters to find what you're looking for.</p>
+</div>
             {hasActiveFilters && (
               <button onClick={clearFilters} className="clear-filters-btn font-[Inter]" style={{ marginTop: "12px" }}>
                 Clear All Filters

@@ -1,8 +1,11 @@
+import { useState, useCallback } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
+import { ToastProvider } from "./components/Toast";
 import ScrollToTop from "./components/ScrollToTop";
+import LoadingScreen from "./components/LoadingScreen";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
 import Home from "./pages/Home";
@@ -21,33 +24,40 @@ import TermsConditions from "./pages/TermsConditions";
 import Disclaimer from "./pages/Disclaimer";
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
+  const handleFinish = useCallback(() => setLoading(false), []);
+
+  if (loading) return <LoadingScreen onFinish={handleFinish} />;
+
   return (
     <BrowserRouter>
       <ScrollToTop />
       <ThemeProvider>
         <AuthProvider>
           <CartProvider>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Home />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signin/admin" element={<AdminSignIn />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-conditions" element={<TermsConditions />} />
-              <Route path="/disclaimer" element={<Disclaimer />} />
+            <ToastProvider>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<Home />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/signin/admin" element={<AdminSignIn />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-conditions" element={<TermsConditions />} />
+                <Route path="/disclaimer" element={<Disclaimer />} />
 
-              {/* Protected Routes — Login Required */}
-              <Route path="/products" element={<PrivateRoute><Products /></PrivateRoute>} />
-              <Route path="/products/:id" element={<PrivateRoute><ProductDetail /></PrivateRoute>} />
-              <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
-              <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
-              <Route path="/wishlist" element={<PrivateRoute><Wishlist /></PrivateRoute>} />
-              <Route path="/my-orders" element={<PrivateRoute><MyOrders /></PrivateRoute>} />
+                {/* Protected Routes */}
+                <Route path="/products" element={<PrivateRoute><Products /></PrivateRoute>} />
+                <Route path="/products/:id" element={<PrivateRoute><ProductDetail /></PrivateRoute>} />
+                <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
+                <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
+                <Route path="/wishlist" element={<PrivateRoute><Wishlist /></PrivateRoute>} />
+                <Route path="/my-orders" element={<PrivateRoute><MyOrders /></PrivateRoute>} />
 
-              {/* Admin Routes */}
-              <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
-            </Routes>
+                {/* Admin Routes */}
+                <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
+              </Routes>
+            </ToastProvider>
           </CartProvider>
         </AuthProvider>
       </ThemeProvider>

@@ -674,3 +674,41 @@
 .checkout-dark .continue-btn:hover {
   background-color: #e5e7eb;
 }
+/* ===== CONFETTI ANIMATION ===== */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+  animation: confettiFadeOut 5s ease forwards;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10px;
+  border-radius: 2px;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes confettiFadeOut {
+  0%, 80% { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
